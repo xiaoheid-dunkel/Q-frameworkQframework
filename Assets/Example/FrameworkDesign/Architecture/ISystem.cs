@@ -1,31 +1,26 @@
 using UnityEngine;
 
-namespace FrameworkDesign
-{
-    public interface IModel : IBelongToArchitecture,ICanSetArchitecture
+namespace FrameworkDesign {
+    public interface ISystem : IBelongToArchitecture, ICanSetArchitecture
     {
         void Init();
     }
 
-    public abstract class AbstractModel : IModel
+    public abstract class AbstractSystem : ISystem
     {
         private IArchitecture mArchitecture = null;
-
         public IArchitecture GetArchitecture()
         {
             return mArchitecture;
         }
-
         public void SetArchitecture(IArchitecture architecture)
         {
             mArchitecture = architecture;
         }
-
-        void IModel.Init()
+        void ISystem.Init()
         {
             OnInit();
         }
-
         protected abstract void OnInit();
     }
 }

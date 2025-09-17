@@ -15,14 +15,21 @@ namespace FrameworkDesign.Example
                 {
                     gameObject.SetActive(false);
 
-                    new GameStartCommand().Execute();
+                    GetArchitecture().SendCommand<GameStartCommand>();
                 });
         }
 
+        public IArchitecture GetArchitecture()
+        {
+            return PointGame.Interface;
+        }
+        // is called before the first execution of Update
+
         // Update is called once per frame
+        
         void Update()
         {
-
+            
         }
     }
 

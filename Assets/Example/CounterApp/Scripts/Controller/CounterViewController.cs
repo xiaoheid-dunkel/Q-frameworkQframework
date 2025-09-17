@@ -5,25 +5,25 @@ using FrameworkDesign;
 
 namespace CounterApp
 {
-    public class CounterViewController : MonoBehaviour
+    public class CounterViewController : MonoBehaviour,IController
     {
         private ICounterModel mCounterModel;
         private void Start()
         {
-            mCounterModel = CounterApp.Get<ICounterModel>();
+            mCounterModel = GetArchitecture().GetModel<ICounterModel>();
 
             mCounterModel.Count.OnValueChanged += OnCountChanged;
 
             transform.Find("BtnAdd").GetComponent<Button>().
                 onClick.AddListener(() =>
                 {
-                    new AddCountCommand().Execute();
+                    GetArchitecture().SendCommand<AddCountCommand>();
                 });
 
             transform.Find("BtnSub").GetComponent<Button>().
                 onClick.AddListener(() =>
                 {
-                    new SubCountCommand().Execute();
+                    GetArchitecture().SendCommand<SubCountCommand>();
                 });
 
             OnCountChanged(mCounterModel.Count.Value);
@@ -40,6 +40,11 @@ namespace CounterApp
 
             mCounterModel = null;
         }
+        
+        public IArchitecture GetArchitecture()
+        {
+            return CounterApp.Interface;
+        }
 
     }
 
@@ -48,11 +53,11 @@ namespace CounterApp
         BindableProperty<int> Count { get; }
     }
 
-    public class CounterModel : ICounterModel
+    public class CounterModel : AbstractModel, ICounterModel
     {
-        public void Init()
+        protected override void OnInit()
         {
-            var storage = Architecture.GetUtility<IStorage>();
+            var storage = GetArchitecture().GetUtility<IStorage>();
 
             Count.Value = storage.LoadInt("COUNTER_COUNT", 0);
 
@@ -63,8 +68,6 @@ namespace CounterApp
         }
 
         public BindableProperty<int> Count { get; } = new BindableProperty<int>() { Value = 0 };
-
-        public IArchitecture Architecture { get; set; }
     }
 
     public class OnCountChangedEvent : Event<OnCountChangedEvent>

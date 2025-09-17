@@ -8,8 +8,13 @@ namespace FrameworkDesign.Example
         {
             Destroy(gameObject);
 
-            new KillEnemyCommand().Execute();
+            GetArchitecture().SendCommand<KillEnemyCommand>();
   
+        }
+
+        public IArchitecture GetArchitecture()
+        {
+            return PointGame.Interface;
         }
     }
 }

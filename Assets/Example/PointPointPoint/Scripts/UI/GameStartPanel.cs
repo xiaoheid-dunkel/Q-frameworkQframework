@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace FrameworkDesign.Example
 {
-    public class GameStartPanel : MonoBehaviour
+    public class GameStartPanel : MonoBehaviour,IController
     {
         public GameObject Enemies;
 
@@ -15,7 +15,7 @@ namespace FrameworkDesign.Example
                 {
                     gameObject.SetActive(false);
 
-                    GetArchitecture().SendCommand<GameStartCommand>();
+                    this.SendCommand<GameStartCommand>();
                 });
         }
 

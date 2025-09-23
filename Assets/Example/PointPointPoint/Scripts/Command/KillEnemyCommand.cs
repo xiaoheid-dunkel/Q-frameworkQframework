@@ -4,13 +4,15 @@ namespace FrameworkDesign.Example
     {
         protected override void OnExecute()
         {
-            var gameModel = GetArchitecture().GetModel<IGameModel>();
+            var gameModel = this.GetModel<IGameModel>();
 
             gameModel.KillCount.Value++;
 
+            this.SendEvent<OnKillEnemyEvent>();
+
             if(gameModel.KillCount.Value == 10)
             {
-                GamePassEvent.Trigger();
+                this.SendEvent<GamePassEvent>();
             }
         }
     }

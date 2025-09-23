@@ -6,7 +6,14 @@ namespace FrameworkDesign.Example
     {
         protected override void Init()
         {
+            Debug.Log("PointGameInit");
+
+            Register<IScoreSystem>(new ScoreSystem());
+
             Register<IGameModel>(new GameModel());
+
+            Register<IStorage>(new PlayerPrefsStorage());
+
         }
     }
 

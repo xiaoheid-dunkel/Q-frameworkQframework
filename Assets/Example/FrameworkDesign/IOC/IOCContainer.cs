@@ -4,25 +4,6 @@ using UnityEngine;
 
 namespace FrameworkDesign
 {
-    public class BluetoothManager
-    {
-        public void Connect()
-        {
-            Debug.Log("1");
-        }
-    }
-
-    public class IOCExample : MonoBehaviour
-    {
-        private void Start()
-        {
-            var container = new IOCContainer();
-            container.Register(new BluetoothManager());
-            
-        }
-    }
-
-
     public class IOCContainer
     {
         public Dictionary<Type, object> mInstances = new Dictionary<Type, object>();

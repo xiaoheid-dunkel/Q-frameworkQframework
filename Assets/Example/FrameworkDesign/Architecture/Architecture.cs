@@ -10,15 +10,25 @@ namespace FrameworkDesign
 
         void RegisterModel<T>(T instance) where T : IModel;
 
-        void RegisterUtility<T>(T instance);
+        void RegisterUtility<T>(T instance) where T : IUtility;
+
+        T GetSystem<T>() where T : class, ISystem;
 
         T GetModel<T>() where T : class, IModel;
 
-        T GetUtility<T>() where T : class;
+        T GetUtility<T>() where T : class, IUtility;
 
         void SendCommand<T>() where T : ICommand, new();
 
         void SendCommand<T>(T command) where T : ICommand;
+
+        void SendEvent<T>() where T : new();
+
+        void SendEvent<T>(T e);
+
+        IUnRegister RegisterEvent<T>(Action<T> OnEvent);
+
+        void UnRegisterEvent<T>(Action<T> OnEvent);
     }
 
     public abstract class Architecture<T> : IArchitecture where T : Architecture<T>, new()
@@ -35,6 +45,7 @@ namespace FrameworkDesign
 
             if (mInited)
             {
+                Debug.Log("SystemInit");
                 instance.Init();
             }
             else
@@ -63,7 +74,7 @@ namespace FrameworkDesign
         #region 类似于单列模式 仅在内部访问
         public static Action<T> OnRegisterPatch = architecture => { };
 
-        private static T mArchitecture;
+        private static T mArchitecture = null;
 
         public static IArchitecture Interface
         {
@@ -88,11 +99,10 @@ namespace FrameworkDesign
 
                 foreach (var architectureModel in mArchitecture.mModels)
                 {
-                   architectureModel.Init();
+                    architectureModel.Init();
                 }
 
                 mArchitecture.mModels.Clear();
-
                 foreach (var architectureSystem in mArchitecture.mSystems)
                 {
                     architectureSystem.Init();
@@ -115,12 +125,17 @@ namespace FrameworkDesign
             mArchitecture.mContainer.Register<T>(instance);
         }
 
-        public void RegisterUtility<T>(T instance)
+        public void RegisterUtility<T>(T instance) where T : IUtility
         {
             mContainer.Register<T>(instance);
         }
 
-        public T GetUtility<T>() where T : class
+        public T GetSystem<T>() where T : class, ISystem
+        {
+            return mContainer.Get<T>();
+        }
+
+        public T GetUtility<T>() where T : class, IUtility
         {
             return mContainer.Get<T>();
         }
@@ -132,7 +147,7 @@ namespace FrameworkDesign
 
         public void SendCommand<T>() where T : ICommand, new()
         {
-            T command = new T();
+            var command = new T();
             command.SetArchitecture(this);
             command.Execute();
         }
@@ -143,12 +158,27 @@ namespace FrameworkDesign
             command.Execute();
         }
 
-        public static T Get<T>() where T : class
+        private ITypeEventSystem mTypeEventSystem = new TypeEventSystem();
+
+        public void SendEvent<T>() where T : new()
         {
-            MakeSureArchitecture();
-            return mArchitecture.mContainer.Get<T>();
+            mTypeEventSystem.Send<T>();
         }
 
+        public void SendEvent<T>(T e)
+        {
+            mTypeEventSystem.Send<T>(e);
+        }
+
+        public IUnRegister RegisterEvent<T>(Action<T> onEvent)
+        {
+            return mTypeEventSystem.Register<T>(onEvent);
+        }
+
+        public void UnRegisterEvent<T>(Action<T> onEvent)
+        {
+            mTypeEventSystem.UnRegister<T>(onEvent);
+        }
     }
 
 }

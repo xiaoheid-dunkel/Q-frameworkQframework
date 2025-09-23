@@ -1,7 +1,8 @@
 using UnityEngine;
 
 namespace FrameworkDesign {
-    public interface ISystem : IBelongToArchitecture, ICanSetArchitecture
+    public interface ISystem : IBelongToArchitecture, ICanSetArchitecture, ICanGetModel,ICanGetUtility
+        ,ICanRegisterEvent,ICanSendEvent,ICanGetSystem
     {
         void Init();
     }
@@ -9,11 +10,12 @@ namespace FrameworkDesign {
     public abstract class AbstractSystem : ISystem
     {
         private IArchitecture mArchitecture = null;
-        public IArchitecture GetArchitecture()
+        
+        IArchitecture IBelongToArchitecture.GetArchitecture()
         {
             return mArchitecture;
         }
-        public void SetArchitecture(IArchitecture architecture)
+        void ICanSetArchitecture.SetArchitecture(IArchitecture architecture)
         {
             mArchitecture = architecture;
         }

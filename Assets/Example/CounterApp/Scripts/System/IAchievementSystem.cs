@@ -12,9 +12,10 @@ namespace CounterApp
     {
         protected override void OnInit()
         {
-            var counterModel = GetArchitecture().GetModel<ICounterModel>();
+            Debug.Log("CounterApp.AchievemwentSystem");
+            var counterModel = this.GetModel<ICounterModel>();
 
-            counterModel.Count.OnValueChanged += newCount =>
+            counterModel.Count.mOnValueChanged += newCount =>
             {
                 if (newCount >= 10)
                 {

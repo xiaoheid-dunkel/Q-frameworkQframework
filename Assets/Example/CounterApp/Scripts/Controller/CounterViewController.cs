@@ -10,9 +10,9 @@ namespace CounterApp
         private ICounterModel mCounterModel;
         private void Start()
         {
-            mCounterModel = GetArchitecture().GetModel<ICounterModel>();
+            mCounterModel = this.GetModel<ICounterModel>();
 
-            mCounterModel.Count.OnValueChanged += OnCountChanged;
+            mCounterModel.Count.mOnValueChanged += OnCountChanged;
 
             transform.Find("BtnAdd").GetComponent<Button>().
                 onClick.AddListener(() =>
@@ -36,7 +36,7 @@ namespace CounterApp
 
         private void OnDestroy()
         {
-            mCounterModel.Count.OnValueChanged -= OnCountChanged;
+            mCounterModel.Count.mOnValueChanged -= OnCountChanged;
 
             mCounterModel = null;
         }
@@ -57,11 +57,11 @@ namespace CounterApp
     {
         protected override void OnInit()
         {
-            var storage = GetArchitecture().GetUtility<IStorage>();
+            var storage = this.GetUtility<IStorage>();
 
             Count.Value = storage.LoadInt("COUNTER_COUNT", 0);
 
-            Count.OnValueChanged += count =>
+            Count.mOnValueChanged += count =>
             {
                 storage.SaveInt("COUNTER_COUNT", count);
             };
@@ -70,7 +70,7 @@ namespace CounterApp
         public BindableProperty<int> Count { get; } = new BindableProperty<int>() { Value = 0 };
     }
 
-    public class OnCountChangedEvent : Event<OnCountChangedEvent>
+    public struct OnCountChangedEvent
     {
 
     }

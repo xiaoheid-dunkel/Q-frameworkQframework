@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace FrameworkDesign
 {
-    public interface IModel : IBelongToArchitecture,ICanSetArchitecture
+    public interface IModel : IBelongToArchitecture,ICanSetArchitecture,ICanGetUtility,ICanSendEvent
     {
         void Init();
     }
@@ -11,12 +11,12 @@ namespace FrameworkDesign
     {
         private IArchitecture mArchitecture = null;
 
-        public IArchitecture GetArchitecture()
+        IArchitecture IBelongToArchitecture.GetArchitecture()
         {
             return mArchitecture;
         }
 
-        public void SetArchitecture(IArchitecture architecture)
+        void ICanSetArchitecture.SetArchitecture(IArchitecture architecture)
         {
             mArchitecture = architecture;
         }

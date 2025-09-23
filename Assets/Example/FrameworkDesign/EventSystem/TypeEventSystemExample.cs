@@ -61,16 +61,22 @@ namespace Example
                 mTypeEventSystem.Send<EventA>();
             }
 
-            if(Input.GetMouseButtonDown(1))
+            if(Input.GetMouseButtonDown(0))
             {
                 mTypeEventSystem.Send<EventB>(new EventB()
                 {
                     ParamB = 123
                 });
+
+                mTypeEventSystem.Send<EventB>(new EventB()
+                {
+                    ParamB = 333
+                });
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                Debug.Log("AAA");
                 mTypeEventSystem.Send<IEventGroup>(new EventC());
                 mTypeEventSystem.Send<IEventGroup>(new EventD());
             }

@@ -2,16 +2,12 @@ using UnityEngine;
 
 namespace FrameworkDesign.Example
 {
-    public class Enemy : MonoBehaviour,IController
+    public class ErrorArea : MonoBehaviour,IController
     {
         private void OnMouseDown()
         {
-            Destroy(gameObject);
-
-            this.SendCommand<KillEnemyCommand>();
-
-            Debug.Log("Correct");
-  
+            Debug.Log("OnClick");
+            this.SendCommand<MissCommand>();
         }
 
         public IArchitecture GetArchitecture()
@@ -19,4 +15,5 @@ namespace FrameworkDesign.Example
             return PointGame.Interface;
         }
     }
+
 }

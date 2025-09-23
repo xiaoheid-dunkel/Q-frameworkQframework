@@ -1,10 +1,12 @@
+using UnityEngine;
+
 namespace FrameworkDesign.Example
 {
-    public class GameStartCommand : AbstractCommand,ICommand
+    public class MissCommand : AbstractCommand
     {
         protected override void OnExecute()
         {
-            this.SendEvent<GameStartEvent>();
+            this.SendEvent<OnMissEvent>();
         }
     }
 
